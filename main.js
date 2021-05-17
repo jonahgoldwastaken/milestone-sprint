@@ -91,7 +91,7 @@ async function main() {
 
 		console.log('Project with correct name:', project)
 
-		const columns = projects.columns.nodes
+		const columns = project.columns.nodes
 
 		console.log('Columns in project:', columns)
 
