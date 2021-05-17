@@ -134,7 +134,7 @@ async function main() {
 					headers: {
 						accept: 'application/vnd.github.inertia-preview+json',
 					},
-					position: 'position',
+					position: null,
 					card_id: issueNumberToCardMap.get(issue.number),
 					column_id: toColumn.id,
 				})
