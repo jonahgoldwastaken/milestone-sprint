@@ -6162,7 +6162,7 @@ async function main() {
 			)
 		)
 
-		console.log('Issue to card map:', issueNumbersCardMap)
+		console.log('Issue to card map:', issueNumberToCardMap)
 
 		const {
 			data: [{ number: milestoneNumber }],
