@@ -1,0 +1,21 @@
+name: Milestone Sprint
+description: Prepare a sprint for the milestone which is closest due
+author: Jonah Meijers
+runs:
+  using: node15
+  main: dist/index.js
+inputs:
+  project_name:
+    description: The name of the project to update the tasks on.
+    required: true
+  backlog_column:
+    description: The column to move the tasks in the nearest milestone from.
+    required: false
+    default: Backlog
+  todo_column:
+    description: The column to move the tasks in the nearest milestone to.
+    required: false
+    default: To do
+  token:
+    description: The token provided by GitHub under secrets.GITHUB_TOKEN.
+    required: true

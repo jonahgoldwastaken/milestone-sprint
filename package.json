@@ -1,0 +1,25 @@
+{
+  "name": "milestone-sprint",
+  "version": "1.0.0",
+  "description": "Start your GitHub milestone sprint",
+  "main": "index.js",
+  "scripts": {},
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theonejonahgold/milestone-sprint"
+  },
+  "keywords": [],
+  "author": "Jonah Meijers <jonahmeijers97@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/theonejonahgold/milestone-sprint/issues"
+  },
+  "homepage": "https://github.com/theonejonahgold/milestone-sprint#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.7",
+    "@actions/github": "^5.0.0",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {}
+}
