@@ -6170,7 +6170,7 @@ async function main() {
 		console.log(
 			columns.filter(
 				col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
-			).cards
+			)
 		)
 
 		const cards = columns
