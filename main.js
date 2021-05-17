@@ -83,7 +83,7 @@ async function main() {
 			}
 		)
 
-		console.dir(repsoitory)
+		console.dir(repository)
 
 		const project = repository.projects.nodes[0]
 
