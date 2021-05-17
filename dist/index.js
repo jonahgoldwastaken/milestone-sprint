@@ -6090,7 +6090,7 @@ async function main() {
 			...github.context.repo,
 		}
 
-		const repository = await octokit.graphql(
+		const { repository } = await octokit.graphql(
 			`
 	query FindProject($owner: String!, $repo: String!, $project: String) {
 		repository(owner: $owner, name: $repo) {
@@ -6139,8 +6139,6 @@ async function main() {
 				project: projectName,
 			}
 		)
-
-		console.log(repository)
 
 		const project = repository.projects[0].edges.node
 
