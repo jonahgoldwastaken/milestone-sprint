@@ -26,6 +26,9 @@ Nothing at the moment.
 
 ## Example usage
 
-uses: actions/hello-world-javascript-action@v1.1
+```yaml
+uses: theonejonahgold/milestone-sprint@v0.0.1
 with:
-who-to-greet: 'Mona the Octocat'
+  project_name: Project
+  token: ${{ secrets.GITHUB_TOKEN }}
+```
