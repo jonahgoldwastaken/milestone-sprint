@@ -6049,40 +6049,23 @@ module.exports = require("zlib");;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nccwpck_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(127);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(134);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(534);
-
-
-
+const core = __nccwpck_require__(127)
+const github = __nccwpck_require__(134)
 
 main()
 
 async function main() {
 	try {
-		const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('token')
-		const projectName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('project_name')
-		const backlogColumnName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('backlog_column')
-		const todoColumnName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('todo_column')
+		const token = core.getInput('token')
+		const projectName = core.getInput('project_name')
+		const backlogColumnName = core.getInput('backlog_column')
+		const todoColumnName = core.getInput('todo_column')
 
 		switch (false) {
 			case token:
@@ -6094,11 +6077,11 @@ async function main() {
 				)
 		}
 
-		const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(token)
+		const octokit = github.getOctokit(token)
 
 		const baseRequest = {
-			owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
-			repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
+			owner: github.context.repo.owner,
+			repo: github.context.repo.owner,
 		}
 
 		const { data: projectsForRepo } = await octokit.rest.projects.listForRepo({
@@ -6137,7 +6120,7 @@ async function main() {
 			({ content_url }) =>
 				+content_url.slice(
 					0,
-					`https://api.github.com/repos/${_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner}/${_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo}/issues/`
+					`https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/issues/`
 						.length
 				)
 		)
@@ -6178,7 +6161,7 @@ async function main() {
 			)
 		)
 	} catch (error) {
-		_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message)
+		core.setFailed(error.message)
 	}
 }
 
