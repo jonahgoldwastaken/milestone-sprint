@@ -6147,7 +6147,6 @@ async function main() {
 		const issueNumbers = filteredCards.map(
 			({ content_url }) =>
 				+content_url.slice(
-					0,
 					`https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/issues/`
 						.length
 				)
