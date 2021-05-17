@@ -6090,41 +6090,70 @@ async function main() {
 			...github.context.repo,
 		}
 
-		const { data: projectsForRepo, status } =
-			await octokit.rest.projects.listForRepo({
+		const repository = await octokit.graphql(
+			`
+	query FindProject($owner: String!, $repo: String!, $project: String) {
+		repository(owner: $owner, name: $repo) {
+			milestones(states: [OPEN], orderBy: {field: DUE_DATE, direction: ASC}, first: 100) {
+				nodes {
+					issues(filterBy: {states: [OPEN]}, first: 100) {
+						nodes {
+							id
+						}
+					}
+				}
+			}
+			projects(search: $project, first: 100) {
+				nodes {
+					id
+					name
+					columns(first: 100) {
+						nodes {
+							id
+							name
+							cards {
+								nodes {
+									id
+									content {
+										... on Issue {
+											milestone {
+												id
+											}
+										}
+										... on PullRequest {
+											milestone {
+												id
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}`,
+			{
 				...baseRequest,
-				headers: {
-					accept: 'application/vnd.github.inertia-preview+json',
-				},
-				state: 'open',
-			})
-
-		console.log('status for project fetch:', status)
-
-		console.log(
-			'Projects in repo:',
-			projectsForRepo.map(({ name }) => name)
+				project: projectName,
+			}
 		)
 
-		const project = projectsForRepo.find(
-			project => project.name === projectName
-		)
+		const project = repository.projects[0].edges.node
 
 		if (!project) throw new Error(`Project with name ${projectName} not found`)
 
 		console.log('Project with correct name:', project)
 
-		const { data: columns } = await octokit.rest.projects.listColumns({
-			headers: {
-				accept: 'application/vnd.github.inertia-preview+json',
-			},
-			project_id: project.id,
-		})
+		const {
+			columns: { edges: columns },
+		} = project
 
 		console.log('Columns in project:', columns)
 
-		const fromColumn = columns.find(col => col.name === backlogColumnName)
-		const toColumn = columns.find(col => col.name === todoColumnName)
+		const fromColumn = columns.find(col => col.node.name === backlogColumnName)
+		const toColumn = columns.find(col => col.node.name === todoColumnName)
 
 		if (!fromColumn)
 			throw new Error(`Backlog column with ${backlogColumnName} not found`)
@@ -6132,75 +6161,34 @@ async function main() {
 		if (!toColumn)
 			throw new Error(`Backlog column with ${todoColumnName} not found`)
 
-		const { data: cards } = await octokit.rest.projects.listCards({
-			headers: {
-				accept: 'application/vnd.github.inertia-preview+json',
-			},
-			column_id: fromColumn.id,
-			archived_state: 'not_archived',
-		})
+		const milestone = repository.milestones[0]
+
+		const cards = project.columns.nodes
+			.filter(
+				column => column.name.toLowerCase() === backlogColumnName.toLowerCase()
+			)
+			.cards.nodes.filter(card => card.milestone.id === milestone.id)
 
 		console.log('Cards found in backlog column:', cards)
 
-		const filteredCards = cards.filter(card => !!card.content_url)
-
-		const issueNumbers = filteredCards.map(
-			({ content_url }) =>
-				+content_url.slice(
-					`https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/issues/`
-						.length
-				)
-		)
-
-		console.log('Issue numbers:', issueNumbers)
-
-		const issueNumberToCardMap = new Map(
-			filteredCards.reduce(
-				(acc, curr, i) => [...acc, [issueNumbers[i], curr]],
-				[]
-			)
-		)
-
-		console.log('Issue to card map:', issueNumberToCardMap)
-
-		const {
-			data: [{ number: milestoneNumber }],
-		} = await octokit.rest.issues.listMilestones({
-			...baseRequest,
-			sort: 'due_on',
-		})
-
-		console.log('Milestone number:', milestoneNumber)
-
-		const { data: issuesForMilestone } = await octokit.rest.issues.listForRepo({
-			...baseRequest,
-			milestone: milestoneNumber,
-		})
-
-		console.log('Issues for milestone:', issuesForMilestone)
-
-		const filteredIssues = issuesForMilestone.filter(issue =>
-			issueNumberToCardMap.has(issue.number)
-		)
-
-		console.log('filtered issues for milestone:', filteredIssues)
-
 		const responses = await Promise.all(
-			filteredIssues.map(issue =>
+			cards.map(card =>
 				octokit.graphql(
-					`mutation updateCardPosition($card: MoveProjectCardInput!) {
-	moveProjectCard(input: $card) {
-		cardEdge {
-			node {
-				id
+					`
+	mutation updateCardPosition($card: MoveProjectCardInput!) {
+		moveProjectCard(input: $card) {
+			cardEdge {
+				node {
+					id
+				}
 			}
 		}
 	}
-}`,
+					`,
 					{
 						card: {
 							columnId: toColumn.id,
-							cardId: issueNumberToCardMap.get(issue.number).node_id,
+							cardId: card.id,
 						},
 						headers: {
 							accept: 'application/vnd.github.inertia-preview+json',
