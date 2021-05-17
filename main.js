@@ -110,6 +110,12 @@ async function main() {
 
 		const milestone = repository.milestones[0]
 
+		console.log(
+			columns.filter(
+				col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
+			).cards
+		)
+
 		const cards = columns
 			.filter(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
 			.cards.nodes.filter(card => card.milestone.id === milestone.id)
