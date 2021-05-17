@@ -6165,7 +6165,7 @@ async function main() {
 		if (!toColumn)
 			throw new Error(`Backlog column with ${todoColumnName} not found`)
 
-		const milestone = repository.milestones[0]
+		const milestone = repository.milestones.nodes[0]
 
 		console.log(
 			milestone,
