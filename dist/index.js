@@ -6077,11 +6077,17 @@ async function main() {
 				)
 		}
 
+		console.log(token)
+		console.log(projectName)
+		console.log(backlogColumnName)
+		console.log(todoColumnName)
+		console.log(github.context.repo.owner)
+		console.log(github.context.repo.repo)
+
 		const octokit = github.getOctokit(token)
 
 		const baseRequest = {
-			owner: github.context.repo.owner,
-			repo: github.context.repo.repo,
+			...github.context.repo,
 		}
 
 		const { data: projectsForRepo, status } =
@@ -6134,7 +6140,7 @@ async function main() {
 			archived_state: 'not_archived',
 		})
 
-		console.log('# Cards found in backlog column:', cards.length)
+		console.log('Cards found in backlog column:', cards)
 
 		const filteredCards = cards.filter(card => !!card.content_url)
 
@@ -6147,6 +6153,8 @@ async function main() {
 				)
 		)
 
+		console.log('Issue numbers:', issueNumbers)
+
 		const issueNumberToCardMap = new Map(
 			filteredCards.reduce(
 				(acc, curr, i) => [...acc, [issueNumbers[i], curr]],
@@ -6154,23 +6162,31 @@ async function main() {
 			)
 		)
 
+		console.log('Issue to card map:', issueNumbersCardMap)
+
 		const {
-			data: [{ title, number: milestoneNumber }],
+			data: [{ number: milestoneNumber }],
 		} = await octokit.rest.issues.listMilestones({
 			...baseRequest,
 			sort: 'due_on',
 		})
+
+		console.log('Milestone number:', milestoneNumber)
 
 		const { data: issuesForMilestone } = await octokit.rest.issues.listForRepo({
 			...baseRequest,
 			milestone: milestoneNumber,
 		})
 
+		console.log('Issues for milestone:', issuesForMilestone)
+
 		const filteredIssues = issuesForMilestone.filter(issue =>
 			issueNumberToCardMap.has(issue.number)
 		)
 
-		await Promise.all(
+		console.log('filtered issues for milestone:', filteredIssues)
+
+		const responses = await Promise.all(
 			filteredIssues.map(issue =>
 				octokit.rest.projects.moveCard({
 					headers: {
@@ -6182,6 +6198,8 @@ async function main() {
 				})
 			)
 		)
+
+		console.log(responses)
 	} catch (error) {
 		core.setFailed(error.message)
 	}
