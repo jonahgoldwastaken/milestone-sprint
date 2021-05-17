@@ -6084,13 +6084,16 @@ async function main() {
 			repo: github.context.repo.owner,
 		}
 
-		const { data: projectsForRepo } = await octokit.rest.projects.listForRepo({
-			...baseRequest,
-			headers: {
-				accept: 'application/vnd.github.inertia-preview+json',
-			},
-			state: 'open',
-		})
+		const { data: projectsForRepo, status } =
+			await octokit.rest.projects.listForRepo({
+				...baseRequest,
+				headers: {
+					accept: 'application/vnd.github.inertia-preview+json',
+				},
+				state: 'open',
+			})
+
+		console.log('status for project fetch:', status)
 
 		console.log(
 			'Projects in repo:',
