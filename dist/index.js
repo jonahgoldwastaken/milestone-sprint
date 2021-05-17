@@ -6167,7 +6167,12 @@ async function main() {
 
 		const milestone = repository.milestones[0]
 
-		console.log(milestone, cards)
+		console.log(
+			milestone,
+			columns.find(
+				col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
+			).cards
+		)
 
 		const cards = columns
 			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
