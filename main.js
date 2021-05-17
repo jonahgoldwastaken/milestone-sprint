@@ -130,14 +130,26 @@ async function main() {
 
 		const responses = await Promise.all(
 			filteredIssues.map(issue =>
-				octokit.rest.projects.moveCard({
-					headers: {
-						accept: 'application/vnd.github.inertia-preview+json',
-					},
-					position: null,
-					card_id: issueNumberToCardMap.get(issue.number),
-					column_id: toColumn.id,
-				})
+				octokit.graphql(
+					`mutation updateCardPosition($card: MoveProjectCardInput!) {
+	moveProjectCard(input: $card) {
+		cardEdge {
+			node {
+				id
+			}
+		}
+	}
+}`,
+					{
+						card: {
+							columnId: toColumn.id,
+							cardId: issueNumberToCardMap.get(issue.number),
+						},
+						headers: {
+							accept: 'application/vnd.github.inertia-preview+json',
+						},
+					}
+				)
 			)
 		)
 
