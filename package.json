@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Start your GitHub milestone sprint",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "prepare": "husky install"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/theonejonahgold/milestone-sprint"
@@ -19,5 +21,7 @@
     "@actions/core": "^1.2.7",
     "@actions/github": "^5.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "husky": "^6.0.0"
+  }
 }

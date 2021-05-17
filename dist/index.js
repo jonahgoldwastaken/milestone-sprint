@@ -6081,7 +6081,7 @@ async function main() {
 
 		const baseRequest = {
 			owner: github.context.repo.owner,
-			repo: github.context.repo.owner,
+			repo: github.context.repo.repo,
 		}
 
 		const { data: projectsForRepo, status } =
