@@ -33,7 +33,7 @@ async function main() {
 			...github.context.repo,
 		}
 
-		const repository = await octokit.graphql(
+		const { data: repository } = await octokit.graphql(
 			`
 	query FindProject($owner: String!, $repo: String!, $project: String) {
 		repository(owner: $owner, name: $repo) {
