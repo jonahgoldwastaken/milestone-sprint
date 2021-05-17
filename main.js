@@ -96,10 +96,10 @@ async function main() {
 		console.log('Columns in project:', columns)
 
 		const fromColumn = columns.find(
-			col => col.name.toLowerCase() === backlogColumnName
+			col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
 		)
 		const toColumn = columns.find(
-			col => col.name.toLowerCase() === todoColumnName
+			col => col.name.toLowerCase() === todoColumnName.toLowerCase()
 		)
 
 		if (!fromColumn)
