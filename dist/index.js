@@ -6092,9 +6092,18 @@ async function main() {
 			state: 'open',
 		})
 
+		console.log(
+			'Projects in repo:',
+			projectsForRepo.map(({ name }) => name)
+		)
+
 		const project = projectsForRepo.find(
 			project => project.name === projectName
 		)
+
+		if (!project) throw new Error(`Project with name ${projectName} not found`)
+
+		console.log('Project with correct name:', project)
 
 		const { data: columns } = await octokit.rest.projects.listColumns({
 			headers: {
@@ -6103,8 +6112,16 @@ async function main() {
 			project_id: project.id,
 		})
 
+		console.log('Columns in project:', columns)
+
 		const fromColumn = columns.find(col => col.name === backlogColumnName)
 		const toColumn = columns.find(col => col.name === todoColumnName)
+
+		if (!fromColumn)
+			throw new Error(`Backlog column with ${backlogColumnName} not found`)
+
+		if (!toColumn)
+			throw new Error(`Backlog column with ${todoColumnName} not found`)
 
 		const { data: cards } = await octokit.rest.projects.listCards({
 			headers: {
@@ -6113,6 +6130,8 @@ async function main() {
 			column_id: fromColumn.id,
 			archived_state: 'not_archived',
 		})
+
+		console.log('# Cards found in backlog column:', cards.length)
 
 		const filteredCards = cards.filter(card => !!card.content_url)
 
