@@ -6167,17 +6167,11 @@ async function main() {
 
 		const milestone = repository.milestones[0]
 
-		console.log(
-			columns.filter(
-				col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
-			)
-		)
+		console.log(milestone, cards)
 
 		const cards = columns
-			.filter(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
-			.flatMap(({ cards }) =>
-				cards.nodes.filter(card => card.milestone.id === milestone.id)
-			)
+			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
+			.cards.nodes.filter(card => card.milestone.id === milestone.id)
 
 		console.log('Cards found in backlog column:', cards)
 
