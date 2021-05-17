@@ -6175,7 +6175,9 @@ async function main() {
 
 		const cards = columns
 			.filter(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
-			.cards.nodes.filter(card => card.milestone.id === milestone.id)
+			.flatMap(({ cards }) =>
+				cards.nodes.filter(card => card.milestone.id === milestone.id)
+			)
 
 		console.log('Cards found in backlog column:', cards)
 
