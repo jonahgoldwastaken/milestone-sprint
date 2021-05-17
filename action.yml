@@ -2,7 +2,7 @@ name: Milestone Sprint
 description: Prepare a sprint for the milestone which is closest due
 author: Jonah Meijers
 runs:
-  using: node15
+  using: node12
   main: dist/index.js
 inputs:
   project_name:
