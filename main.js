@@ -91,14 +91,16 @@ async function main() {
 
 		console.log('Project with correct name:', project)
 
-		const {
-			columns: { nodes: columns },
-		} = project
+		const columns = projects.columns.nodes
 
 		console.log('Columns in project:', columns)
 
-		const fromColumn = columns.find(col => col.name === backlogColumnName)
-		const toColumn = columns.find(col => col.name === todoColumnName)
+		const fromColumn = columns.find(
+			col => col.name.toLowerCase() === backlogColumnName
+		)
+		const toColumn = columns.find(
+			col => col.name.toLowerCase() === todoColumnName
+		)
 
 		if (!fromColumn)
 			throw new Error(`Backlog column with ${backlogColumnName} not found`)
@@ -108,10 +110,8 @@ async function main() {
 
 		const milestone = repository.milestones[0]
 
-		const cards = project.columns.nodes
-			.filter(
-				column => column.name.toLowerCase() === backlogColumnName.toLowerCase()
-			)
+		const cards = columns
+			.filter(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
 			.cards.nodes.filter(card => card.milestone.id === milestone.id)
 
 		console.log('Cards found in backlog column:', cards)
