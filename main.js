@@ -143,7 +143,7 @@ async function main() {
 					{
 						card: {
 							columnId: toColumn.id,
-							cardId: issueNumberToCardMap.get(issue.number).id,
+							cardId: issueNumberToCardMap.get(issue.number).node_id,
 						},
 						headers: {
 							accept: 'application/vnd.github.inertia-preview+json',
