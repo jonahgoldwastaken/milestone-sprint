@@ -83,20 +83,22 @@ async function main() {
 			}
 		)
 
-		const project = repository.projects[0].edges.node
+		console.dir(repsoitory)
+
+		const project = repository.projects.nodes[0]
 
 		if (!project) throw new Error(`Project with name ${projectName} not found`)
 
 		console.log('Project with correct name:', project)
 
 		const {
-			columns: { edges: columns },
+			columns: { nodes: columns },
 		} = project
 
 		console.log('Columns in project:', columns)
 
-		const fromColumn = columns.find(col => col.node.name === backlogColumnName)
-		const toColumn = columns.find(col => col.node.name === todoColumnName)
+		const fromColumn = columns.find(col => col.name === backlogColumnName)
+		const toColumn = columns.find(col => col.name === todoColumnName)
 
 		if (!fromColumn)
 			throw new Error(`Backlog column with ${backlogColumnName} not found`)
