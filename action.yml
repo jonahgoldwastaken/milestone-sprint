@@ -1,6 +1,9 @@
 name: Milestone Sprint
 description: Prepare a sprint for the milestone which is closest due
 author: Jonah Meijers
+branding:
+  icon: bar-chart
+  color: orange
 runs:
   using: node12
   main: dist/index.js
