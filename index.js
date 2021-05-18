@@ -1,9 +1,9 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-main()
+run()
 
-async function main() {
+async function run() {
 	try {
 		const token = core.getInput('token')
 		const projectName = core.getInput('project_name')
@@ -39,6 +39,7 @@ async function main() {
 		repository(owner: $owner, name: $repo) {
 			milestones(states: [OPEN], orderBy: {field: DUE_DATE, direction: ASC}, first: 100) {
 				nodes {
+					id
 					issues(filterBy: {states: [OPEN]}, first: 100) {
 						nodes {
 							id

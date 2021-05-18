@@ -2,9 +2,11 @@
   "name": "milestone-sprint",
   "version": "1.0.0",
   "description": "Start your GitHub milestone sprint",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "jest",
+    "build": "ncc build index.js --license licenses.txt"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,7 @@
     "@actions/github": "^5.0.0"
   },
   "devDependencies": {
+    "@vercel/ncc": "^0.28.5",
     "husky": "^6.0.0"
   }
 }

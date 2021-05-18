@@ -1,5 +1,0 @@
-console.log(
-	`https://api.github.com/repos/theonejonahgold/ms-test/issues/1`.slice(
-		`https://api.github.com/repos/theonejonahgold/ms-test/issues/`.length
-	)
-)
