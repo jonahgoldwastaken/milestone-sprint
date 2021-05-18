@@ -120,7 +120,7 @@ async function run() {
 
 		const cards = columns
 			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
-			.cards.nodes.filter(card => card.milestone.id === milestone.id)
+			.cards.nodes.filter(card => card.content.milestone.id === milestone.id)
 
 		console.log('Cards found in backlog column:', cards)
 
