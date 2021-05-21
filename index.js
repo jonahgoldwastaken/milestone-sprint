@@ -124,21 +124,17 @@ async function run() {
 			} from "${backlogColumnName}" to "${todoColumnName}"`
 		)
 
-		const mutationProps = cards.reduce(
-			(acc, _, i) => acc.concat(`, $card${i}: MoveProjectCardInput!`),
-			''
-		)
-		const mutationBody = cards.reduce(
+		const mutationBodies = cards.reduce(
 			(acc, _, i) =>
-				acc.concat(`
-			moveProjectCard(input: $card${i}) {
+				acc.concat(`mutation updateCard${i} ($card${i}: MoveProjectCardInput!) {
+			moveProjectCard(input: $card) {
 				cardEdge {
 					node {
 						id
 					}
 				}
 			}
-		`),
+		}`),
 			''
 		)
 		const mutationOptions = {
@@ -157,13 +153,7 @@ async function run() {
 			},
 		}
 
-		await octokit.graphql(
-			`mutation updateCardPosition(${mutationProps}) {
-					${mutationBody}
-				}
-				`,
-			mutationOptions
-		)
+		await octokit.graphql(mutationBodies, mutationOptions)
 
 		console.log('Successfully moved cards, happy sprinting! :)')
 	} catch (error) {
