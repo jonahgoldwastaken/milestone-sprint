@@ -6163,7 +6163,7 @@ async function run() {
 		const milestone = repository.milestones.nodes[0]
 
 		console.log(
-			`Retrieving cards in ${backlogColumnName} with milestone ${milestone.title}`
+			`Retrieving cards in "${backlogColumnName}" with milestone "${milestone.title}"`
 		)
 
 		const cards = columns
@@ -6172,7 +6172,7 @@ async function run() {
 			.filter(card => card.content.milestone.id === milestone.id)
 
 		if (!cards.length) {
-			return console.log('No cards to move. Happy sprinting! :)')
+			return console.log('No cards to move, happy sprinting! :)')
 		}
 
 		console.log(
