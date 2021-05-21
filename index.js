@@ -30,38 +30,40 @@ async function run() {
 
 		const { repository } = await octokit.graphql(
 			`
-	query FindProject($owner: String!, $repo: String!, $project: String) {
-		repository(owner: $owner, name: $repo) {
-			milestones(states: [OPEN], orderBy: {field: DUE_DATE, direction: ASC}, first: 100) {
-				nodes {
-					id
-					issues(filterBy: {states: [OPEN]}, first: 100) {
-						nodes {
-							id
+		query FindProject($owner: String!, $repo: String!, $project: String) {
+			repository(owner: $owner, name: $repo) {
+				milestones(states: [OPEN], orderBy: {field: DUE_DATE, direction: ASC}, first: 1) {
+					nodes {
+						id
+						title
+						issues(filterBy: {states: [OPEN]}, first: 100) {
+							nodes {
+								id
+							}
 						}
 					}
 				}
-			}
-			projects(search: $project, first: 100) {
-				nodes {
-					id
-					name
-					columns(first: 100) {
-						nodes {
-							id
-							name
-							cards {
-								nodes {
-									id
-									content {
-										... on Issue {
-											milestone {
-												id
+				projects(search: $project, first: 1) {
+					nodes {
+						id
+						name
+						columns(first: 10) {
+							nodes {
+								id
+								name
+								cards(archivedStates: NOT_ARCHIVED, first: 100) {
+									nodes {
+										id
+										content {
+											... on Issue {
+												milestone {
+													id
+												}
 											}
-										}
-										... on PullRequest {
-											milestone {
-												id
+											... on PullRequest {
+												milestone {
+													id
+												}
 											}
 										}
 									}
@@ -71,8 +73,7 @@ async function run() {
 					}
 				}
 			}
-		}
-	}`,
+		}`,
 			{
 				...baseRequest,
 				project: projectName,
