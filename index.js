@@ -20,13 +20,6 @@ async function run() {
 				)
 		}
 
-		console.log(token)
-		console.log(projectName)
-		console.log(backlogColumnName)
-		console.log(todoColumnName)
-		console.log(github.context.repo.owner)
-		console.log(github.context.repo.repo)
-
 		const octokit = github.getOctokit(token)
 
 		const baseRequest = {
@@ -84,17 +77,11 @@ async function run() {
 			}
 		)
 
-		console.dir(repository)
-
 		const project = repository.projects.nodes[0]
 
 		if (!project) throw new Error(`Project with name ${projectName} not found`)
 
-		console.log('Project with correct name:', project)
-
 		const columns = project.columns.nodes
-
-		console.log('Columns in project:', columns)
 
 		const fromColumn = columns.find(
 			col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
@@ -111,19 +98,10 @@ async function run() {
 
 		const milestone = repository.milestones.nodes[0]
 
-		console.log(
-			milestone,
-			columns.find(
-				col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
-			).cards
-		)
-
 		const cards = columns
 			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
 			.cards.nodes.filter(card => !!card.content.milestone)
 			.filter(card => card.content.milestone.id === milestone.id)
-
-		console.log('Cards found in backlog column:', cards)
 
 		const responses = await Promise.all(
 			cards.map(card =>
@@ -151,8 +129,6 @@ async function run() {
 				)
 			)
 		)
-
-		console.log(responses)
 	} catch (error) {
 		core.setFailed(error.message)
 	}
