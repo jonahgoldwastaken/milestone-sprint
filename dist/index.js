@@ -6099,7 +6099,7 @@ async function run() {
 					nodes {
 						id
 						name
-						columns(first: 10) {
+						columns(first: 5) {
 							nodes {
 								id
 								name
