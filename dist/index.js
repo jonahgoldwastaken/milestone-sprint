@@ -6181,46 +6181,41 @@ async function run() {
 			} from "${backlogColumnName}" to "${todoColumnName}"`
 		)
 
-		const mutationBodies = cards.reduce(
-			(acc, _, i) =>
-				acc.concat(`mutation updateCard${i}($card${i}: MoveProjectCardInput!) {
-		moveProjectCard(input: $card${i}) {
-			cardEdge {
-				node {
-					id
-				}
-			}
-		}
-	}
-
-		`),
-			''
+		await Promise.all(
+			cards.map((card, i) =>
+				wait(i * 200).then(() =>
+					octokit.graphql(
+						`mutation updateCard($card: MoveProjectCardInput!) {
+							moveProjectCard(input: $card) {
+								cardEdge {
+									node {
+										id
+									}
+								}
+							}
+						}`,
+						{
+							card: {
+								columnId: toColumn.id,
+								cardId: curr.id,
+							},
+							headers: {
+								accept: 'application/vnd.github.inertia-preview+json',
+							},
+						}
+					)
+				)
+			)
 		)
-
-		console.log(mutationBodies)
-
-		const mutationOptions = {
-			...cards.reduce(
-				(acc, curr, i) => ({
-					...acc,
-					[`card${i}`]: {
-						columnId: toColumn.id,
-						cardId: curr.id,
-					},
-				}),
-				{}
-			),
-			headers: {
-				accept: 'application/vnd.github.inertia-preview+json',
-			},
-		}
-
-		await octokit.graphql(mutationBodies, mutationOptions)
 
 		console.log('Successfully moved cards, happy sprinting! :)')
 	} catch (error) {
 		core.setFailed(error.message)
 	}
+}
+
+function wait(timeout = 500) {
+	return new Promise(resolve => setTimeout(resolve, timeout))
 }
 
 })();
