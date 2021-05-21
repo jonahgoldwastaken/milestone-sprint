@@ -115,7 +115,9 @@ async function run() {
 			.filter(card => card.content.milestone.id === milestone.id)
 
 		console.log(
-			`Moving ${cards.length} cards from ${backlogColumnName} to ${todoColumnName}`
+			`Moving ${
+				cards.length === 1 ? 'card' : 'cards'
+			} from ${backlogColumnName} to ${todoColumnName}`
 		)
 
 		await Promise.all(
