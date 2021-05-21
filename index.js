@@ -36,11 +36,6 @@ async function run() {
 					nodes {
 						id
 						title
-						issues(filterBy: {states: [OPEN]}, first: 100) {
-							nodes {
-								id
-							}
-						}
 					}
 				}
 				projects(search: $project, first: 1) {
