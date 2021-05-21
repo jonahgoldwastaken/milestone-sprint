@@ -6196,6 +6196,9 @@ async function run() {
 		`),
 			''
 		)
+
+		console.log(mutationBodies)
+
 		const mutationOptions = {
 			...cards.reduce(
 				(acc, curr, i) => ({
