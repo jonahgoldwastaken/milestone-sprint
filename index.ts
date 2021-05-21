@@ -1,5 +1,38 @@
-const core = require('@actions/core')
-const github = require('@actions/github')
+import core from '@actions/core'
+import github from '@actions/github'
+
+interface DataGatherQuery {
+	repository: {
+		milestones: {
+			nodes: Array<{
+				id: string
+				title: string
+			}>
+		}
+		projects: {
+			nodes: Array<{
+				id: string
+				name: string
+				columns: {
+					nodes: Array<{
+						id: string
+						name: string
+						cards: {
+							nodes: Array<{
+								id: string
+								content: {
+									milestone?: {
+										id: string
+									}
+								}
+							}>
+						}
+					}>
+				}
+			}>
+		}
+	}
+}
 
 run()
 
@@ -11,10 +44,10 @@ async function run() {
 		const todoColumnName = core.getInput('todo_column')
 
 		switch (false) {
-			case token:
-			case projectName:
-			case backlogColumnName:
-			case todoColumnName:
+			case !!token:
+			case !!projectName:
+			case !!backlogColumnName:
+			case !!todoColumnName:
 				throw new Error(
 					'Please supply a "token", "project_name", "backlog_column" and "todo_name" as arguments'
 				)
@@ -28,7 +61,7 @@ async function run() {
 
 		console.log(`Fetching required data for repo ${baseRequest.repo}`)
 
-		const { repository } = await octokit.graphql(
+		const { repository } = await octokit.graphql<DataGatherQuery>(
 			`
 		query FindProject($owner: String!, $repo: String!, $project: String) {
 			repository(owner: $owner, name: $repo) {
@@ -110,9 +143,9 @@ async function run() {
 		)
 
 		const cards = columns
-			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
+			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())!
 			.cards.nodes.filter(card => !!card.content.milestone)
-			.filter(card => card.content.milestone.id === milestone.id)
+			.filter(card => card.content.milestone!.id === milestone.id)
 
 		if (!cards.length) {
 			return console.log('No cards to move, happy sprinting! :)')

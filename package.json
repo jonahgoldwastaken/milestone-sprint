@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "husky install",
     "test": "jest",
-    "build": "ncc build index.js --license licenses.txt"
+    "build": "ncc build index.ts --license licenses.txt"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.28.5",
-    "husky": "^6.0.0"
+    "husky": "^6.0.0",
+    "typescript": "^4.2.4"
   }
 }

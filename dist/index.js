@@ -3390,7 +3390,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var deprecation = __nccwpck_require__(481);
+var deprecation = __nccwpck_require__(932);
 var once = _interopDefault(__nccwpck_require__(223));
 
 const logOnce = once(deprecation => console.warn(deprecation));
@@ -3778,7 +3778,7 @@ function removeHook(state, name, method) {
 
 /***/ }),
 
-/***/ 481:
+/***/ 932:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -6049,44 +6049,88 @@ module.exports = require("zlib");;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
-const core = __nccwpck_require__(186)
-const github = __nccwpck_require__(438)
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(438);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 
-run()
 
-async function run() {
-	try {
-		const token = core.getInput('token')
-		const projectName = core.getInput('project_name')
-		const backlogColumnName = core.getInput('backlog_column')
-		const todoColumnName = core.getInput('todo_column')
-
-		switch (false) {
-			case token:
-			case projectName:
-			case backlogColumnName:
-			case todoColumnName:
-				throw new Error(
-					'Please supply a "token", "project_name", "backlog_column" and "todo_name" as arguments'
-				)
-		}
-
-		const octokit = github.getOctokit(token)
-
-		const baseRequest = {
-			...github.context.repo,
-		}
-
-		console.log(`Fetching required data for repo ${baseRequest.repo}`)
-
-		const { repository } = await octokit.graphql(
-			`
+run();
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const token = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('token');
+            const projectName = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('project_name');
+            const backlogColumnName = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('backlog_column');
+            const todoColumnName = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('todo_column');
+            switch (false) {
+                case !!token:
+                case !!projectName:
+                case !!backlogColumnName:
+                case !!todoColumnName:
+                    throw new Error('Please supply a "token", "project_name", "backlog_column" and "todo_name" as arguments');
+            }
+            const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1___default().getOctokit(token);
+            const baseRequest = Object.assign({}, (_actions_github__WEBPACK_IMPORTED_MODULE_1___default().context.repo));
+            console.log(`Fetching required data for repo ${baseRequest.repo}`);
+            const { repository } = yield octokit.graphql(`
 		query FindProject($owner: String!, $repo: String!, $project: String) {
 			repository(owner: $owner, name: $repo) {
 				milestones(states: [OPEN], orderBy: {field: DUE_DATE, direction: ASC}, first: 1) {
@@ -6125,67 +6169,29 @@ async function run() {
 					}
 				}
 			}
-		}`,
-			{
-				...baseRequest,
-				project: projectName,
-			}
-		)
-
-		const project = repository.projects.nodes[0]
-
-		if (!project)
-			throw new Error(`Project with name "${projectName}" not found`)
-
-		console.log(
-			`Finding column "${todoColumnName}" and "${backlogColumnName}" in project "${projectName}"`
-		)
-
-		const columns = project.columns.nodes
-
-		const fromColumn = columns.find(
-			col => col.name.toLowerCase() === backlogColumnName.toLowerCase()
-		)
-		const toColumn = columns.find(
-			col => col.name.toLowerCase() === todoColumnName.toLowerCase()
-		)
-
-		if (!fromColumn)
-			throw new Error(
-				`Backlog column with name "${backlogColumnName}" not found ${projectName}`
-			)
-
-		if (!toColumn)
-			throw new Error(
-				`Backlog column with name "${todoColumnName}" not found in project ${projectName}`
-			)
-
-		const milestone = repository.milestones.nodes[0]
-
-		console.log(
-			`Retrieving cards in "${backlogColumnName}" with milestone "${milestone.title}"`
-		)
-
-		const cards = columns
-			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
-			.cards.nodes.filter(card => !!card.content.milestone)
-			.filter(card => card.content.milestone.id === milestone.id)
-
-		if (!cards.length) {
-			return console.log('No cards to move, happy sprinting! :)')
-		}
-
-		console.log(
-			`Moving ${cards.length} ${
-				cards.length === 1 ? 'card' : 'cards'
-			} from "${backlogColumnName}" to "${todoColumnName}"`
-		)
-
-		await Promise.all(
-			cards.map((card, i) =>
-				wait(i * 200).then(() =>
-					octokit.graphql(
-						`mutation updateCard($card: MoveProjectCardInput!) {
+		}`, Object.assign(Object.assign({}, baseRequest), { project: projectName }));
+            const project = repository.projects.nodes[0];
+            if (!project)
+                throw new Error(`Project with name "${projectName}" not found`);
+            console.log(`Finding column "${todoColumnName}" and "${backlogColumnName}" in project "${projectName}"`);
+            const columns = project.columns.nodes;
+            const fromColumn = columns.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase());
+            const toColumn = columns.find(col => col.name.toLowerCase() === todoColumnName.toLowerCase());
+            if (!fromColumn)
+                throw new Error(`Backlog column with name "${backlogColumnName}" not found ${projectName}`);
+            if (!toColumn)
+                throw new Error(`Backlog column with name "${todoColumnName}" not found in project ${projectName}`);
+            const milestone = repository.milestones.nodes[0];
+            console.log(`Retrieving cards in "${backlogColumnName}" with milestone "${milestone.title}"`);
+            const cards = columns
+                .find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
+                .cards.nodes.filter(card => !!card.content.milestone)
+                .filter(card => card.content.milestone.id === milestone.id);
+            if (!cards.length) {
+                return console.log('No cards to move, happy sprinting! :)');
+            }
+            console.log(`Moving ${cards.length} ${cards.length === 1 ? 'card' : 'cards'} from "${backlogColumnName}" to "${todoColumnName}"`);
+            yield Promise.all(cards.map((card, i) => wait(i * 200).then(() => octokit.graphql(`mutation updateCard($card: MoveProjectCardInput!) {
 							moveProjectCard(input: $card) {
 								cardEdge {
 									node {
@@ -6193,29 +6199,24 @@ async function run() {
 									}
 								}
 							}
-						}`,
-						{
-							card: {
-								columnId: toColumn.id,
-								cardId: card.id,
-							},
-							headers: {
-								accept: 'application/vnd.github.inertia-preview+json',
-							},
-						}
-					)
-				)
-			)
-		)
-
-		console.log('Successfully moved cards, happy sprinting! :)')
-	} catch (error) {
-		core.setFailed(error.message)
-	}
+						}`, {
+                card: {
+                    columnId: toColumn.id,
+                    cardId: card.id,
+                },
+                headers: {
+                    accept: 'application/vnd.github.inertia-preview+json',
+                },
+            }))));
+            console.log('Successfully moved cards, happy sprinting! :)');
+        }
+        catch (error) {
+            _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(error.message);
+        }
+    });
 }
-
 function wait(timeout = 500) {
-	return new Promise(resolve => setTimeout(resolve, timeout))
+    return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
 })();
