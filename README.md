@@ -1,6 +1,6 @@
 # Milestone Sprint
 
-Prepare your GitHub project for a sprint by automatically moving cards with the closest-due milstone attached from the backlog to your to do column.
+Organise your backlog by moving issues for your closest-due milestone to to do.
 
 ## Inputs
 
