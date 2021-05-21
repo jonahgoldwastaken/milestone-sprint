@@ -118,7 +118,7 @@ async function run() {
 			`Moving ${cards.length} cards from ${backlogColumnName} to ${todoColumnName}`
 		)
 
-		const responses = await Promise.all(
+		await Promise.all(
 			cards.map(card =>
 				octokit.graphql(
 					`
@@ -130,8 +130,7 @@ async function run() {
 				}
 			}
 		}
-	}
-					`,
+	}`,
 					{
 						card: {
 							columnId: toColumn.id,
