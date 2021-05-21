@@ -140,7 +140,7 @@ async function run() {
 						{
 							card: {
 								columnId: toColumn.id,
-								cardId: curr.id,
+								cardId: card.id,
 							},
 							headers: {
 								accept: 'application/vnd.github.inertia-preview+json',
