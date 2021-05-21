@@ -115,7 +115,7 @@ async function run() {
 			.filter(card => card.content.milestone.id === milestone.id)
 
 		console.log(
-			`Moving ${
+			`Moving ${cards.length} ${
 				cards.length === 1 ? 'card' : 'cards'
 			} from "${backlogColumnName}" to "${todoColumnName}"`
 		)
