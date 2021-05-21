@@ -1,5 +1,5 @@
 name: Milestone Sprint
-description: Prepare a sprint for the milestone which is closest due
+description: Prepare your GitHub project for a sprint by automatically moving cards with the closest-due milstone attached from the backlog to your to do column.
 author: Jonah Meijers
 branding:
   icon: bar-chart

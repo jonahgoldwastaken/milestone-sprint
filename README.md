@@ -1,6 +1,6 @@
 # Milestone Sprint
 
-Prepare a sprint for the milestone which is closest due
+Prepare your GitHub project for a sprint by automatically moving cards with the closest-due milstone attached from the backlog to your to do column.
 
 ## Inputs
 
@@ -27,8 +27,12 @@ Nothing at the moment.
 ## Example usage
 
 ```yaml
-uses: theonejonahgold/milestone-sprint@v0.0.1
-with:
-  project_name: Project
-  token: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  start-sprint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: theonejonahgold/milestone-sprint@v1.0.3
+        with:
+          project_name: Project # Set this to the project name on your repo
+          token: ${{ secrets.GITHUB_TOKEN }}
 ```
