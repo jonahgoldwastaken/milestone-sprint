@@ -26,7 +26,7 @@ async function run() {
 			...github.context.repo,
 		}
 
-		console.log('Fetching required data for repo', baseRequest.repo)
+		console.log(`Fetching required data for repo ${baseRequest.repo}`)
 
 		const { repository } = await octokit.graphql(
 			`
@@ -82,10 +82,11 @@ async function run() {
 
 		const project = repository.projects.nodes[0]
 
-		if (!project) throw new Error(`Project with name ${projectName} not found`)
+		if (!project)
+			throw new Error(`Project with name "${projectName}" not found`)
 
 		console.log(
-			`Finding column ${todoColumnName} and ${backlogColumnName} in project ${projectName}`
+			`Finding column "${todoColumnName}" and "${backlogColumnName}" in project "${projectName}"`
 		)
 
 		const columns = project.columns.nodes
@@ -98,10 +99,14 @@ async function run() {
 		)
 
 		if (!fromColumn)
-			throw new Error(`Backlog column with ${backlogColumnName} not found`)
+			throw new Error(
+				`Backlog column with name "${backlogColumnName}" not found ${projectName}`
+			)
 
 		if (!toColumn)
-			throw new Error(`Backlog column with ${todoColumnName} not found`)
+			throw new Error(
+				`Backlog column with name "${todoColumnName}" not found in project ${projectName}`
+			)
 
 		const milestone = repository.milestones.nodes[0]
 
@@ -117,7 +122,7 @@ async function run() {
 		console.log(
 			`Moving ${
 				cards.length === 1 ? 'card' : 'cards'
-			} from ${backlogColumnName} to ${todoColumnName}`
+			} from "${backlogColumnName}" to "${todoColumnName}"`
 		)
 
 		await Promise.all(
