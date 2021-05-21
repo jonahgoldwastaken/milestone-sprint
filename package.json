@@ -2,11 +2,12 @@
   "name": "milestone-sprint",
   "version": "1.0.0",
   "description": "Start your GitHub milestone sprint",
-  "main": "main.js",
+  "main": "lib/index.js",
   "scripts": {
     "prepare": "husky install",
-    "test": "jest",
-    "build": "ncc build index.ts --license licenses.txt"
+    "all": "npm run build && npm run package",
+    "build": "tsc",
+    "package": "ncc build --source-map --license licenses.txt"
   },
   "repository": {
     "type": "git",
