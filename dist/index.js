@@ -6183,8 +6183,7 @@ async function run() {
 
 		const mutationBodies = cards.reduce(
 			(acc, _, i) =>
-				acc.concat(`
-	mutation updateCard${i} ($card${i}: MoveProjectCardInput!) {
+				acc.concat(`mutation updateCard${i}($card${i}: MoveProjectCardInput!) {
 		moveProjectCard(input: $card${i}) {
 			cardEdge {
 				node {
@@ -6193,6 +6192,7 @@ async function run() {
 			}
 		}
 	}
+
 		`),
 			''
 		)
