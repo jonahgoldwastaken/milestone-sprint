@@ -1,130 +1,6 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 822:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(186));
-const github_1 = __importDefault(__nccwpck_require__(438));
-run();
-async function run() {
-    try {
-        const token = core_1.default.getInput('token');
-        const projectName = core_1.default.getInput('project_name');
-        const backlogColumnName = core_1.default.getInput('backlog_column');
-        const todoColumnName = core_1.default.getInput('todo_column');
-        switch (false) {
-            case !!token:
-            case !!projectName:
-            case !!backlogColumnName:
-            case !!todoColumnName:
-                throw new Error('Please supply a "token", "project_name", "backlog_column" and "todo_name" as arguments');
-        }
-        const octokit = github_1.default.getOctokit(token);
-        const baseRequest = {
-            ...github_1.default.context.repo,
-        };
-        console.log(`Fetching required data for repo ${baseRequest.repo}`);
-        const { repository } = await octokit.graphql(`
-		query FindProject($owner: String!, $repo: String!, $project: String) {
-			repository(owner: $owner, name: $repo) {
-				milestones(states: [OPEN], orderBy: {field: DUE_DATE, direction: ASC}, first: 1) {
-					nodes {
-						id
-						title
-					}
-				}
-				projects(search: $project, first: 1) {
-					nodes {
-						id
-						name
-						columns(first: 5) {
-							nodes {
-								id
-								name
-								cards(archivedStates: NOT_ARCHIVED, first: 100) {
-									nodes {
-										id
-										content {
-											... on Issue {
-												milestone {
-													id
-												}
-											}
-											... on PullRequest {
-												milestone {
-													id
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}`, {
-            ...baseRequest,
-            project: projectName,
-        });
-        const project = repository.projects.nodes[0];
-        if (!project)
-            throw new Error(`Project with name "${projectName}" not found`);
-        console.log(`Finding column "${todoColumnName}" and "${backlogColumnName}" in project "${projectName}"`);
-        const columns = project.columns.nodes;
-        const fromColumn = columns.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase());
-        const toColumn = columns.find(col => col.name.toLowerCase() === todoColumnName.toLowerCase());
-        if (!fromColumn)
-            throw new Error(`Backlog column with name "${backlogColumnName}" not found ${projectName}`);
-        if (!toColumn)
-            throw new Error(`Backlog column with name "${todoColumnName}" not found in project ${projectName}`);
-        const milestone = repository.milestones.nodes[0];
-        console.log(`Retrieving cards in "${backlogColumnName}" with milestone "${milestone.title}"`);
-        const cards = columns
-            .find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
-            .cards.nodes.filter(card => !!card.content.milestone)
-            .filter(card => card.content.milestone.id === milestone.id);
-        if (!cards.length) {
-            return console.log('No cards to move, happy sprinting! :)');
-        }
-        console.log(`Moving ${cards.length} ${cards.length === 1 ? 'card' : 'cards'} from "${backlogColumnName}" to "${todoColumnName}"`);
-        await Promise.all(cards.map((card, i) => wait(i * 200).then(() => octokit.graphql(`mutation updateCard($card: MoveProjectCardInput!) {
-							moveProjectCard(input: $card) {
-								cardEdge {
-									node {
-										id
-									}
-								}
-							}
-						}`, {
-            card: {
-                columnId: toColumn.id,
-                cardId: card.id,
-            },
-            headers: {
-                accept: 'application/vnd.github.inertia-preview+json',
-            },
-        }))));
-        console.log('Successfully moved cards, happy sprinting! :)');
-    }
-    catch (error) {
-        core_1.default.setFailed(error.message);
-    }
-}
-function wait(timeout = 500) {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
-
-
-/***/ }),
-
 /***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -6176,13 +6052,128 @@ module.exports = require("zlib");;
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(822);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __nccwpck_require__(186);
+const github = __nccwpck_require__(438);
+run();
+async function run() {
+    try {
+        const token = core.getInput('token');
+        const projectName = core.getInput('project_name');
+        const backlogColumnName = core.getInput('backlog_column');
+        const todoColumnName = core.getInput('todo_column');
+        switch (false) {
+            case !!token:
+            case !!projectName:
+            case !!backlogColumnName:
+            case !!todoColumnName:
+                throw new Error('Please supply a "token", "project_name", "backlog_column" and "todo_name" as arguments');
+        }
+        const octokit = github.getOctokit(token);
+        const baseRequest = {
+            ...github.context.repo,
+        };
+        console.log(`Fetching required data for repo ${baseRequest.repo}`);
+        const { repository } = await octokit.graphql(`
+		query FindProject($owner: String!, $repo: String!, $project: String) {
+			repository(owner: $owner, name: $repo) {
+				milestones(states: [OPEN], orderBy: {field: DUE_DATE, direction: ASC}, first: 1) {
+					nodes {
+						id
+						title
+					}
+				}
+				projects(search: $project, first: 1) {
+					nodes {
+						id
+						name
+						columns(first: 5) {
+							nodes {
+								id
+								name
+								cards(archivedStates: NOT_ARCHIVED, first: 100) {
+									nodes {
+										id
+										content {
+											... on Issue {
+												milestone {
+													id
+												}
+											}
+											... on PullRequest {
+												milestone {
+													id
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}`, {
+            ...baseRequest,
+            project: projectName,
+        });
+        const project = repository.projects.nodes[0];
+        if (!project)
+            throw new Error(`Project with name "${projectName}" not found`);
+        console.log(`Finding column "${todoColumnName}" and "${backlogColumnName}" in project "${projectName}"`);
+        const columns = project.columns.nodes;
+        const fromColumn = columns.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase());
+        const toColumn = columns.find(col => col.name.toLowerCase() === todoColumnName.toLowerCase());
+        if (!fromColumn)
+            throw new Error(`Backlog column with name "${backlogColumnName}" not found ${projectName}`);
+        if (!toColumn)
+            throw new Error(`Backlog column with name "${todoColumnName}" not found in project ${projectName}`);
+        const milestone = repository.milestones.nodes[0];
+        console.log(`Retrieving cards in "${backlogColumnName}" with milestone "${milestone.title}"`);
+        const cards = columns
+            .find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
+            .cards.nodes.filter(card => !!card.content.milestone)
+            .filter(card => card.content.milestone.id === milestone.id);
+        if (!cards.length) {
+            return console.log('No cards to move, happy sprinting! :)');
+        }
+        console.log(`Moving ${cards.length} ${cards.length === 1 ? 'card' : 'cards'} from "${backlogColumnName}" to "${todoColumnName}"`);
+        await Promise.all(cards.map((card, i) => wait(i * 200).then(() => octokit.graphql(`mutation updateCard($card: MoveProjectCardInput!) {
+							moveProjectCard(input: $card) {
+								cardEdge {
+									node {
+										id
+									}
+								}
+							}
+						}`, {
+            card: {
+                columnId: toColumn.id,
+                cardId: card.id,
+            },
+            headers: {
+                accept: 'application/vnd.github.inertia-preview+json',
+            },
+        }))));
+        console.log('Successfully moved cards, happy sprinting! :)');
+    }
+    catch (error) {
+        core.setFailed(error.message);
+    }
+}
+function wait(timeout = 500) {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

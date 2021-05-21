@@ -2,13 +2,11 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es2018",
-    "allowSyntheticDefaultImports": true,
     "module": "commonjs",
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
     "noImplicitAny": true,
-    "esModuleInterop": true,
     "skipLibCheck": true
   },
   "exclude": [
