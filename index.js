@@ -26,6 +26,8 @@ async function run() {
 			...github.context.repo,
 		}
 
+		console.log('Fetching required data for repo', baseRequest.repo)
+
 		const { repository } = await octokit.graphql(
 			`
 	query FindProject($owner: String!, $repo: String!, $project: String) {
@@ -81,6 +83,10 @@ async function run() {
 
 		if (!project) throw new Error(`Project with name ${projectName} not found`)
 
+		console.log(
+			`Finding column ${todoColumnName} and ${backlogColumnName} in project ${projectName}`
+		)
+
 		const columns = project.columns.nodes
 
 		const fromColumn = columns.find(
@@ -98,10 +104,18 @@ async function run() {
 
 		const milestone = repository.milestones.nodes[0]
 
+		console.log(
+			`Retrieving cards in ${backlogColumnName} with milestone ${milestone.title}`
+		)
+
 		const cards = columns
 			.find(col => col.name.toLowerCase() === backlogColumnName.toLowerCase())
 			.cards.nodes.filter(card => !!card.content.milestone)
 			.filter(card => card.content.milestone.id === milestone.id)
+
+		console.log(
+			`Moving ${cards.length} cards from ${backlogColumnName} to ${todoColumnName}`
+		)
 
 		const responses = await Promise.all(
 			cards.map(card =>
@@ -129,6 +143,8 @@ async function run() {
 				)
 			)
 		)
+
+		console.log('Successfully moved cards, happy sprinting! :)')
 	} catch (error) {
 		core.setFailed(error.message)
 	}
