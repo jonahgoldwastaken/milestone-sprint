@@ -114,6 +114,10 @@ async function run() {
 			.cards.nodes.filter(card => !!card.content.milestone)
 			.filter(card => card.content.milestone.id === milestone.id)
 
+		if (!cards.length) {
+			return console.log('No cards to move. Happy sprinting! :)')
+		}
+
 		console.log(
 			`Moving ${cards.length} ${
 				cards.length === 1 ? 'card' : 'cards'
