@@ -120,30 +120,45 @@ async function run() {
 			} from "${backlogColumnName}" to "${todoColumnName}"`
 		)
 
-		await Promise.all(
-			cards.map(card =>
-				octokit.graphql(
-					`
-	mutation updateCardPosition($card: MoveProjectCardInput!) {
-		moveProjectCard(input: $card) {
-			cardEdge {
-				node {
-					id
+		const mutationProps = cards.reduce(
+			(acc, _, i) => acc.concat(`, $card${i}: MoveProjectCardInput!`),
+			''
+		)
+		const mutationBody = cards.reduce(
+			(acc, _, i) =>
+				acc.concat(`
+			moveProjectCard(input: $card${i}) {
+				cardEdge {
+					node {
+						id
+					}
 				}
 			}
+		`),
+			''
+		)
+		const mutationOptions = {
+			...cards.reduce(
+				(acc, curr, i) => ({
+					...acc,
+					[`card${i}`]: {
+						columnId: toColumn.id,
+						cardId: curr.id,
+					},
+				}),
+				{}
+			),
+			headers: {
+				accept: 'application/vnd.github.inertia-preview+json',
+			},
 		}
-	}`,
-					{
-						card: {
-							columnId: toColumn.id,
-							cardId: card.id,
-						},
-						headers: {
-							accept: 'application/vnd.github.inertia-preview+json',
-						},
-					}
-				)
-			)
+
+		await octokit.graphql(
+			`mutation updateCardPosition(${mutationProps}) {
+					${mutationBody}
+				}
+				`,
+			mutationOptions
 		)
 
 		console.log('Successfully moved cards, happy sprinting! :)')
